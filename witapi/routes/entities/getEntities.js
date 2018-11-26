@@ -1,7 +1,7 @@
 const Wit = require('node-wit').Wit
 const witClient = new Wit({
-      accessToken: 'HBLLII2ZQSOES7D4XXTOJWJTXKESHBLL'
-    }
+  accessToken: 'QKNC5R5LSLOJYSJU52XXKLWO7IL6GIVS'
+}
 )
 
 module.exports = (request, response) => {

@@ -1,3 +1,4 @@
+//xac thuc khi fb goi qua duong dan server 
 module.exports = (request, response) => {
     const hubChallenge = request.query['hub.challenge']
     const hubMode = request.query['hub.mode']
