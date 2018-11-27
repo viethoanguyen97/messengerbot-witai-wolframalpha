@@ -1,20 +1,34 @@
-const WitEntitiesConstants = require('./constants/WitEntitiesConstants');
+const WolframAlphaAPI = require('wolfram-alpha-api');
+const waApi = WolframAlphaAPI('E8QHYE-X923L74TPG');
 
-witEntities = WitEntitiesConstants.witEntities
+// waApi.getFull('sin x').then(console.log).catch(console.error);
+// // { success: true, error: false, numpods: 13, datatypes: '', ...
 
-var wolfram = require('wolfram').createClient("E8QHYE-X923L74TPG")
+waApi.getFull('Vietnam').then(console.log).catch(console.error);
+// { success: false, error: false, numpods: 0, datatypes: '', ...
+//
+// waApi.getFull('sin(x)').then((queryresult) => {
+//     const pods = queryresult.pods;
+//     const output = pods.map((pod) => {
+//         const subpodContent = pod.subpods.map(subpod =>
+//             `  <img src="${subpod.img.src}" alt="${subpod.img.alt}">`
+//         ).join('\n');
+//         return `<h2>${pod.title}</h2>\n${subpodContent}`;
+//     }).join('\n');
+//     console.log(output);
+// }).catch(console.error);
 
-// wolfram.query("vietnam", function(err, result) {
-//   console.log("Result: %j", result[0])
-// });
 
 var wolfram_query_random = function (query) {
     console.log(query);
 
-    wolfram.query(query, function (err, result) {
-        console.log(result[1].subpods[0].value)
-        return result[1].subpods[0].value;
-    });
+    let result;
+    waApi.getFull(query).then((queryresult) => {
+        result = queryresult;
+        console.log(result);
+    }).catch(console.error)
+
+    return result
 }
 
 var wolfram_query_intent = function (wit_intent, location) {
@@ -52,4 +66,6 @@ var wolfram_query_one_prop = function (prop_name, location) {
     return null
 };
 
-wolfram_query_intent("get_population", "Hanoi")
+
+var value = wolfram_query_random("Hanoi population");
+console.log(value)

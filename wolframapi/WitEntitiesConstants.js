@@ -1,4 +1,4 @@
-export const WitEntities = {
+const WitEntities = {
   intents: {
     get_weather: 'get_weather',
     get_help_general: 'get_help_general',
@@ -17,4 +17,8 @@ export const WitEntities = {
   datetime: 'datetime',
   thanks: 'thanks',
   wolfram_search_query: 'wolfram_search_query'
+};
+
+module.exports = {
+  witEntities: WitEntities
 };
