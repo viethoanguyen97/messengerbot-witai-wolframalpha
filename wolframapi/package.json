@@ -1,0 +1,9 @@
+{
+  "name": "wolframapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "wolfram": "^0.3.4"
+  }
+}
