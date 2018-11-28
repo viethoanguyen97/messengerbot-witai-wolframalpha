@@ -14,6 +14,14 @@ const wolfram_query_random = (query, callback) =>{
     });
 };
 
+const wolfram_query_image = (query, callback) =>{
+    console.log(query);
+
+    wolfram.query(query, function (err, result) {
+        callback(result[1].subpods[0].image)
+    });
+};
+
 const wolfram_query_intent = (wit_intent, location, callback) => {
     switch (wit_intent) {
         case witEntities.intents.get_area:
@@ -24,6 +32,8 @@ const wolfram_query_intent = (wit_intent, location, callback) => {
             break;
         case witEntities.intents.get_population:
             wolfram_query_random(location + " population", callback);
+            break;
+        case witEntities.intents.get_place_info:
         default:
             break;
     }
@@ -53,6 +63,7 @@ const wolfram_query_intent = (wit_intent, location, callback) => {
 
 module.exports = {
     wolfram_query_random: wolfram_query_random,
+    wolfram_query_image: wolfram_query_image,
     wolfram_query_intent: wolfram_query_intent,
     // wolfram_query_all_props: wolfram_query_all_props,
     // wolfram_query_one_prop: wolfram_query_one_prop,

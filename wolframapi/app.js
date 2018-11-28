@@ -1,4 +1,4 @@
-const WitEntitiesConstants = require('./constants/WitEntitiesConstants');
+const WitEntitiesConstants = require('./WitEntitiesConstants');
 
 witEntities = WitEntitiesConstants.witEntities
 
@@ -13,7 +13,17 @@ var wolfram_query_random = function (query) {
 
     wolfram.query(query, function (err, result) {
         console.log(result[1].subpods[0].value)
+        console.log(result[1].subpods)
         return result[1].subpods[0].value;
+    });
+}
+
+var wolfram_image_query = (query) => {
+    console.log(query)
+
+    wolfram.query(query, function (err, result) {
+        console.log(result[1].subpods)
+        return result[1].subpods[0].image;
     });
 }
 
@@ -52,4 +62,4 @@ var wolfram_query_one_prop = function (prop_name, location) {
     return null
 };
 
-wolfram_query_intent("get_population", "Hanoi")
+wolfram_query_random("Vietnam map")

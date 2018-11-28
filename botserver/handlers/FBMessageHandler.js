@@ -1,8 +1,8 @@
-const FACEBOOK_ACCESS_TOKEN = 'EAAFC0IaV2ywBAMuxIhYPMshG39JiOaKhKDC60YMdWvQRhBin3PC6ZCeKV9aHtQ3LG2K5mpaClOZB860TZAGioaLhzq4gUfnoP5YvEFDM8QudYmul7kKRJbVQkcgPHXm6hnoSRfrbtt9jMrtvnw56Ed5TANZBd0lx8ZBnvzKQKqoAb7OgS575s'
+const FACEBOOK_ACCESS_TOKEN = 'EAAFC0IaV2ywBAD9LWuTQ24FDe9E22hg1wqIqPEZCbC4ZBJ2C5tTf3syqmOy7bFVkPPi4PjTcGfoTUDxaZAgM95CSuKrriwE8FvLWIdfoHfDmZARVFUb9rohWUrDI6pFm8LR6nSbJL0yc9V6aseD1d3LZBHlSVdqnuSzgkUCCegrEoBRdM4tCU'
 const RestClient = require('node-rest-client').Client
 const request = require('request')
-const wolfram = require('wolfram').createClient("E8QHYE-X923L74TPG");
 const witEntities = require('../constants/WitEntitiesConstants').witEntities;
+const getImagesLocationProps = require('../constants/WitEntitiesConstants').getImageLocationProps;
 const wolfram_query = require('../wolfram/queryWolfram');
 
 const sendTextMessage = (senderID, text) => {
@@ -13,6 +13,18 @@ const sendTextMessage = (senderID, text) => {
         json: {
             recipient: {id: senderID},
             message: text
+        }
+    })
+};
+
+const sendImageMessage = (senderID, image) => {
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: FACEBOOK_ACCESS_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id: senderID},
+            message: image
         }
     })
 };
@@ -30,53 +42,57 @@ module.exports = (event) => {
 
     getWitAPIData((witData) => {
         console.log(witData);
-        var location = witData.entities.location[0].value;
-        var intent = witData.entities.intent[0].value;
+        if (witData.entities.location){
+            var location = witData.entities.location[0].value;
+            var intent = witData.entities.intent[0].value;
 
-        console.log(witData.entities.location);
-        console.log(location, intent);
-        if (location) {
+            console.log(witData.entities.location);
+            console.log(location, intent);
+
             sendTextMessage(senderID, {"text": "Welcome to " + location});
-            // switch (intent) {
-            //     case witEntities.intents.get_area:
-            //         wolfram.query(location + " area", function (err, result) {
-            //             console.log(result[1].subpods[0].value)
-            //             var result_wolfram = result[1].subpods[0].value;
-            //             sendTextMessage(senderID, {"text": result_wolfram});
-            //         });
-            //         break;
-            //     case witEntities.intents.get_unemploy:
-            //         wolfram.query(location + " unemploy", function (err, result) {
-            //             console.log(result[1].subpods[0].value)
-            //             var result_wolfram = result[1].subpods[0].value;
-            //             sendTextMessage(senderID, {"text": result_wolfram});
-            //         });
-            //         break;
-            //     case witEntities.intents.get_population:
-            //         wolfram.query(location + " population", function (err, result) {
-            //             console.log(result[1].subpods[0].value)
-            //             var result_wolfram = result[1].subpods[0].value;
-            //             sendTextMessage(senderID, {"text": result_wolfram});
-            //         });
-            //         break;
-            //     default:
-            //         break;
-            // }
-             if (intent) {
-                 var result_wolfram = wolfram_query.wolfram_query_intent(intent, location, function (result) {
-                     console.log(intent, location, result);
-                     sendTextMessage(senderID, {"text": result});
-                 });
-             }
+            if (intent) {//co intent
+                if (intent == witEntities.intents.get_place_info) {//intent = get_place_info => get location_prop to query
+                    var location_property = witData.entities.location_props[0].value;
+                    var wolfram_query_message = location + " " + location_property;
+                    if (getImagesLocationProps.includes(location_property)){//neu tra ve ket qua la hinh anh
+                        console.log("images query");
+                        result_wolfram = wolfram_query.wolfram_query_image(wolfram_query_message, function (result) {
+                            console.log(intent, location, result);
+                            sendImageMessage(senderID,
+                                {"attachment": {
+                                            "type":"image",
+                                            "payload":{
+                                                "url": result,
+                                                "is_reusable":true
+                                            }
+                                        }});
+                        });
+                    } else {//neu tra ve ket qua la text
+                        console.log("text query");
+                        result_wolfram = wolfram_query.wolfram_query_random(wolfram_query_message, function (result) {
+                            console.log(intent, location, result);
+                            sendTextMessage(senderID, {"text": result});
+                        });
+                    }
 
-            //     wolfram.query(query, function (err, result) {
-            //         console.log(result[1].subpods[0].value)
-            //         resultValue = result[1].subpods[0].value;
-            //         //return result[1].subpods[0].value;
-            //     });
-            //
-            //     sendTextMessage(senderID, {"text": result_wolfram});
-            // }
+
+                } else {
+                    var result_wolfram = wolfram_query.wolfram_query_intent(intent, location, function (result) {
+                        console.log(intent, location, result);
+                        sendTextMessage(senderID, {"text": result});
+                    });
+                }
+            }
+
+        }
+
+         if (witData.entities.wolfram_search_query){ //wolfram_search_query
+             var wolfram_search_query = witData.entities.wolfram_search_query[0].value;
+             var result_wolfram = wolfram_query.wolfram_query_random(wolfram_search_query, function (result) {
+                console.log(wolfram_search_query);
+                console.log(result);
+                sendTextMessage(senderID, {"text": result});
+            });
         }
     });
 

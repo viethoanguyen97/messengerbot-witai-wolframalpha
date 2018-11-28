@@ -11,5 +11,8 @@
   "dependencies": {
     "express": "^4.16.4",
     "node-wit": "^5.0.0"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }

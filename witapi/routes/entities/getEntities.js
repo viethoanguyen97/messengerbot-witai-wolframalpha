@@ -1,6 +1,6 @@
 const Wit = require('node-wit').Wit
 const witClient = new Wit({
-  accessToken: '3KQX5ICVNIAQI3KOCXF72C3CMKMXNRFR'
+  accessToken: 'MLZ3LSWPL7MXKVCUG3PQR6J2ERZDBWO3'
 }
 )
 
