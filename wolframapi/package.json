@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "node-wikipedia": "^0.0.2",
+    "wikipediajs": "^1.4.0",
     "wolfram": "^0.3.4"
   }
 }
