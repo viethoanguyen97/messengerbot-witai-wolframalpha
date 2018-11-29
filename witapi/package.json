@@ -4,15 +4,14 @@
   "description": "wit.ai apis",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node -r dotenv/config app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ckey": "^1.0.2",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "node-wit": "^5.0.0"
-  },
-  "scripts": {
-    "start": "node app.js"
   }
 }

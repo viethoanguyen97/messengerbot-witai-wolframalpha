@@ -1,8 +1,11 @@
 const Wit = require('node-wit').Wit
+
 const witClient = new Wit({
-  accessToken: 'QCWEBVBG4R52QLXGYTLLR3ZAJOFXPMXQ'
+  accessToken: process.env.WIT_ACCESS_TOKEN,
 }
 )
+
+console.log(process.env.WIT_ACCESS_TOKEN)
 
 module.exports = (request, response) => {
   var message = request.body.userMessage
