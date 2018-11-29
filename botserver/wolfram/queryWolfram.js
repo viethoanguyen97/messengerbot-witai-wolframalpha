@@ -6,7 +6,18 @@ const wolfram = require('wolfram').createClient("E8QHYE-X923L74TPG");
 //   console.log("Result: %j", result[0])
 // });
 
-const wolfram_query_random = (query, callback) =>{
+const wolfram_query_random = (query, callback) => {
+    console.log(query);
+    wolfram.query(query, function (err, result) {
+        if (result[1].subpods[0].image != ''){
+            callback(result[1].subpods[0].image, 'image')
+        } else {
+            callback(result[1].subpods[0].value, 'text')
+        }
+    });
+};
+
+const wolfram_query_text = (query, callback) => {
     console.log(query);
 
     wolfram.query(query, function (err, result) {
@@ -39,32 +50,11 @@ const wolfram_query_intent = (wit_intent, location, callback) => {
     }
 };
 
-// const wolfram_query_all_props = (location) => {//get all info of a locations
-//     wolfram.query(query_message, function (err, result) {
-//         console.log("Result: %j", result);
-//         return result
-//     });
-// };
-//
-// const wolfram_query_one_prop = (prop_name, location) => {
-//     const all_props = wolfram_query_all_props(location);
-//
-//     all_props.forEach(props => {
-//         if (props == prop_name) {
-//             return props.value;
-//         }
-//     });
-//
-//     return null
-// };
-//
-// var value = wolfram_query_random("Hanoi population");
-// console.log(value)
-
 module.exports = {
     wolfram_query_random: wolfram_query_random,
     wolfram_query_image: wolfram_query_image,
     wolfram_query_intent: wolfram_query_intent,
+    wolfram_query_text: wolfram_query_text,
     // wolfram_query_all_props: wolfram_query_all_props,
     // wolfram_query_one_prop: wolfram_query_one_prop,
 };

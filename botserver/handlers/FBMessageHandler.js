@@ -30,32 +30,49 @@ const sendImageMessage = (senderID, image) => {
     })
 };
 
+const join_multiple_location = (locations) => {
+    var result = "";
+    for (var it in locations){
+        console.log(locations[it])
+        result += locations[it].value + " ";
+    }
+
+    console.log(locations, " ", result);
+
+    return result;
+};
+
+const send_wolfram_query_result = (senderID, query) => {
+    var wolfram_query_send = wolfram_query.wolfram_query_random(query, function(result, resultType){
+        switch (resultType){
+            case 'image':
+                sendImageMessage(senderID,
+                    {
+                        "attachment": {
+                            "type": "image",
+                            "payload": {
+                                "url": result,
+                                "is_reusable": true
+                            }
+                        }
+                    });
+                break;
+            case 'text':
+                sendTextMessage(senderID, {"text": result});
+                break;
+            default:
+                break;
+        }
+    });
+}
+
 const handle_query_location_props = (senderID, locations, location_props) => {
-    var location = locations[0].value;
+    //var location = locations[0].value;
+    var location = join_multiple_location(locations);
     var location_property = location_props[0].value;
     var wolfram_query_message = location + " " + location_property;
-    if (getImagesLocationProps.includes(location_property)) {//neu tra ve ket qua la hinh anh
-        console.log("images query");
-        result_wolfram = wolfram_query.wolfram_query_image(wolfram_query_message, function (result) {
-            console.log("get_place_info", location, result);
-            sendImageMessage(senderID,
-                {
-                    "attachment": {
-                        "type": "image",
-                        "payload": {
-                            "url": result,
-                            "is_reusable": true
-                        }
-                    }
-                });
-        });
-    } else {//neu tra ve ket qua la text
-        console.log("text query");
-        result_wolfram = wolfram_query.wolfram_query_random(wolfram_query_message, function (result) {
-            console.log("get_place_info", location, result);
-            sendTextMessage(senderID, {"text": result});
-        });
-    }
+    console.log("get_place_info", location);
+    send_wolfram_query_result(senderID, wolfram_query_message);
 };
 
 const handle_query_location = (senderID, locations) => {
@@ -70,7 +87,7 @@ const handle_query_location = (senderID, locations) => {
 
 module.exports = (event) => {
     const senderID = event.sender.id;
-    const fbUserMessage = event.message.text;
+    const fbUserMessage = event.message.text.trim().toLowerCase();
 
     console.log('SenderID: ' + senderID);
     console.log('User Message: ' + fbUserMessage);
@@ -88,7 +105,6 @@ module.exports = (event) => {
             switch (intent) {
                 case witEntities.intents.get_place_info:
                     if (witData.entities.location) {
-                        var location = witData.entities.location[0].value;
                         console.log(witData.entities.location);
                         console.log(intent);
                         if (witData.entities.location_props) {//location + location props => wolfram
@@ -116,19 +132,42 @@ module.exports = (event) => {
                     break;
                 default:
                     if (witData.entities.location) {
-                        var location = witData.entities.location[0].value;
-                        var result_wolfram = wolfram_query.wolfram_query_intent(intent, location, function (result) {
+                        //var location = witData.entities.location[0].value;
+                        var location = join_multiple_location(witData.entities.location)
+                        var result_wolfram = wolfram_query.wolfram_query_intent(intent, location, function (result, resultType) {
                             console.log(intent, result);
-                            sendTextMessage(senderID, {"text": result});
+                            /*sendTextMessage(senderID, {"text": result});*/
+                            switch (resultType){
+                                case 'image':
+                                    sendImageMessage(senderID,
+                                        {
+                                            "attachment": {
+                                                "type": "image",
+                                                "payload": {
+                                                    "url": result,
+                                                    "is_reusable": true
+                                                }
+                                            }
+                                        });
+                                    break;
+                                case 'text':
+                                    sendTextMessage(senderID, {"text": result});
+                                    break;
+                                default:
+                                    break;
+                            }
                         });
+
                     } else {
-                        var result_wolfram = wolfram_query.wolfram_query_random(fbUserMessage, function (result) {
+                        var result_wolfram = wolfram_query.wolfram_query_text(fbUserMessage, function (result) {
                             console.log(fbUserMessage, result);
                             sendTextMessage(senderID, {"text": result});
                         });
                     }
                     break;
             }
+
+            return;
         }
 
         if (witData.entities.greetings) {
