@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  uetgeobot-witapi:
+    build: ./
+    image: uetgeobot/witapi:latest
+    environment:
+      - WIT_ACCESS_TOKEN=64DHR2V2CHAXFF2AVJOFK3IOTTQMIFNG
+    networks:
+      - uetgeobot
+networks:
+    uetgeobot:

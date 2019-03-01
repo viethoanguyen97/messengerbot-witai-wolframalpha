@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+  uetgeobot-botserver:
+    image: uetgeobot/botserver:latest
+    environment:
+      - FACEBOOK_ACCESS_TOKEN=EAAbccSzw3AgBAB7QhAJroydZCZAxxvbVtOgrEgLjSXi59ZBbN4Kkj5w1jVTe9Nn1ECZCK4HzA6y9UDCDM4o1azHZBO6IsUfLy6SzjTZAANw9GoYcZAXLTgr0B17zXyIoMdmusKjZB2wuZBObXH3w7pIV8AMXEDesGNX2SBrSypK13vpAWYQe1ELiy
+      - FACEBOOK_VERIFY_TOKEN=uetgeobot
+      - WOLFRAM_CLIENT_KEY=E8QHYE-X923L74TPG
+      - DB_URL=mongodb://localhost:27017/UETGeoBot
+      - COLLECTION_CHATLOG=chatlog
+    ports:
+      - "443:4005"
+    networks:
+      - uetgeobot
+  uetgeobot-witapi:
+    image: uetgeobot/witapi:latest
+    environment:
+      - WIT_ACCESS_TOKEN=64DHR2V2CHAXFF2AVJOFK3IOTTQMIFNG
+    networks:
+      - uetgeobot
+networks:
+    uetgeobot:
