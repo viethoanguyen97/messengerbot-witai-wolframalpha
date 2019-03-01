@@ -12,5 +12,5 @@ app.get('/', verification)
 app.post('/', messageWebHook)
 
 app.listen(4005, () => {
-    console.log('AskMe server listening on port 4005')
+  console.log('AskMe server listening on port 4005')
 })

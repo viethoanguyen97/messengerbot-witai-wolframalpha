@@ -18,54 +18,52 @@ waApi.getFull('Vietnam').then(console.log).catch(console.error);
 //     console.log(output);
 // }).catch(console.error);
 
-
 var wolfram_query_random = function (query) {
-    console.log(query);
+  console.log(query);
 
-    let result;
-    waApi.getFull(query).then((queryresult) => {
-        result = queryresult;
-        console.log(result);
-    }).catch(console.error)
+  let result;
+  waApi.getFull(query).then((queryresult) => {
+    result = queryresult;
+    console.log(result);
+  }).catch(console.error)
 
-    return result
+  return result
 }
 
 var wolfram_query_intent = function (wit_intent, location) {
-    switch (wit_intent) {
-        case witEntities.intents.get_area:
-            return wolfram_query_random(location + " area");
-            break;
-        case witEntities.intents.get_unemploy:
-            return wolfram_query_random(location + " unemploy");
-            break;
-        case witEntities.intents.get_population:
-            return wolfram_query_random(location + " population")
-            break;
-        default:
-            break;
-    }
+  switch (wit_intent) {
+    case witEntities.intents.get_area:
+      return wolfram_query_random(location + " area");
+      break;
+    case witEntities.intents.get_unemploy:
+      return wolfram_query_random(location + " unemploy");
+      break;
+    case witEntities.intents.get_population:
+      return wolfram_query_random(location + " population")
+      break;
+    default:
+      break;
+  }
 };
 
 var wolfram_query_all_props = function (location) {//get all info of a locations
-    wolfram.query(query_message, function (err, result) {
-        console.log("Result: %j", result);
-        return result
-    });
+  wolfram.query(query_message, function (err, result) {
+    console.log("Result: %j", result);
+    return result
+  });
 };
 
 var wolfram_query_one_prop = function (prop_name, location) {
-    const all_props = wolfram_query_all_props(location);
+  const all_props = wolfram_query_all_props(location);
 
-    all_props.forEach(props => {
-        if (props == prop_name) {
-            return props.value;
-        }
-    });
+  all_props.forEach(props => {
+    if (props == prop_name) {
+      return props.value;
+    }
+  });
 
-    return null
+  return null
 };
-
 
 var value = wolfram_query_random("Hanoi population");
 console.log(value)
