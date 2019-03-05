@@ -5,11 +5,12 @@ services:
     build: ./
     image: uetgeobot/botserver:latest
     environment:
-      - FACEBOOK_ACCESS_TOKEN=EAAbccSzw3AgBAB7QhAJroydZCZAxxvbVtOgrEgLjSXi59ZBbN4Kkj5w1jVTe9Nn1ECZCK4HzA6y9UDCDM4o1azHZBO6IsUfLy6SzjTZAANw9GoYcZAXLTgr0B17zXyIoMdmusKjZB2wuZBObXH3w7pIV8AMXEDesGNX2SBrSypK13vpAWYQe1ELiy
-      - FACEBOOK_VERIFY_TOKEN=uetgeobot
+      - FACEBOOK_ACCESS_TOKEN=EAAfeA15MBZB8BAMK1mbLByghNsyzGucMfdAoLyALnBWODZC6rbqDWCrY82zPZAFkeJoiI9btLLpU15EwduZBBZAuK5eBW7ZBmYVbapUq0Ne3prf9TsbXen2b2pzmUP6pqZCFZBmNI0jZC91j8HClLeQTugnN2WRk43r7pPVZAAmxIgWQZDZD
+      - FACEBOOK_VERIFY_TOKEN=UETGeoBot
       - WOLFRAM_CLIENT_KEY=E8QHYE-X923L74TPG
       - DB_URL=mongodb://localhost:27017/UETGeoBot
       - COLLECTION_CHATLOG=chatlog
+      - WITAPI_URL=http://uetgeobot_uetgeobot-witapi:4000/v1/getEntitiesInfo
     networks:
       - uetgeobot
 networks:
