@@ -231,7 +231,7 @@ module.exports = (event) => {
       data: {userMessage: fbUserMessage},
       headers: {"Content-Type": "application/json"}
     };
-    client.post("http://localhost:4000/v1/getEntitiesInfo", arguments,
+    client.post(process.env.WITAPI_URL, arguments,
         function (data, response) {
           if (data.isSuccess == true) {
             callback(data.data)
