@@ -24,7 +24,9 @@ const wolfram_query_random = (query, numberOfLocations, callback) => {
         }
       }
     } else {
-      callback("no data available", 'text');
+      callback(
+          "I don't know how to answer your question right now, but i'll keep studying to figure it out",
+          'text');
     }
   });
 };
