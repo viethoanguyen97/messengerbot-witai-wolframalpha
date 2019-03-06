@@ -106,16 +106,19 @@ module.exports = (event) => {
   getWitAPIData((witData) => {
     console.log(witData);
     if (witData.entities) {
-      if (witData.entities.wolfram_search_query) { //wolfram_search_query
-        //var wolfram_search_query = witData.entities.wolfram_search_query[0].value;
-        var result_wolfram = wolfram_query.wolfram_query_random(fbUserMessage,
-            0, function (result, resultType) {
-              console.log(fbUserMessage);
-              console.log(result);
-              //sendTextMessage(senderID, {"text": result});
-              replyMessageQuery(senderID, result, resultType)
-            });
+      if (witData.entities.greetings) {
+        sendTextMessage(senderID,
+            {"text": "Hi, I’m XYZ bot. What can I do for you today?"});
+        return;
+      }
 
+      if (witData.entities.thanks) {
+        sendTextMessage(senderID, {"text": "Glad to help"});
+        return;
+      }
+
+      if (witData.entities.bye) {
+        sendTextMessage(senderID, {"text": "Bye"});
         return;
       }
 
@@ -195,21 +198,19 @@ module.exports = (event) => {
         return;
       }
 
-      if (witData.entities.greetings) {
-        sendTextMessage(senderID,
-            {"text": "Hi, I’m XYZ bot. What can I do for you today?"});
+      if (witData.entities.wolfram_search_query) { //wolfram_search_query
+        //var wolfram_search_query = witData.entities.wolfram_search_query[0].value;
+        var result_wolfram = wolfram_query.wolfram_query_random(fbUserMessage,
+            0, function (result, resultType) {
+              console.log(fbUserMessage);
+              console.log(result);
+              //sendTextMessage(senderID, {"text": result});
+              replyMessageQuery(senderID, result, resultType)
+            });
+
         return;
       }
 
-      if (witData.entities.thanks) {
-        sendTextMessage(senderID, {"text": "Glad to help"});
-        return;
-      }
-
-      if (witData.entities.bye) {
-        sendTextMessage(senderID, {"text": "Bye"});
-        return;
-      }
     } else {
       var result_wolfram = wolfram_query.wolfram_query_random(fbUserMessage,
           function (result, resultType) {
